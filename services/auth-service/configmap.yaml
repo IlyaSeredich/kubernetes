@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-config
+
+data:
+  SPRING_PROFILES_ACTIVE: docker
+  SPRING_DATASOURCE_USERNAME: appuser
+
+  KEYCLOAK_ROOT_SERVER_URL: http://keycloak:8080
+  KEYCLOAK_ROOT_CLIENT: admin-cli
+  KEYCLOAK_ROOT_REALM: master
+  KEYCLOAK_ROOT_USERNAME: admin
+
+  KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/app-realm/protocol/openid-connect/certs
+
+  KEYCLOAK_MANAGE_SERVER_URL: http://keycloak:8080
+  KEYCLOAK_MANAGE_CLIENT: app-manage-client
+  KEYCLOAK_MANAGE_REALM: app-realm
+
+  KEYCLOAK_AUTH_SERVER_URL: http://keycloak:8080
+  KEYCLOAK_AUTH_CLIENT: app-auth-client
+  KEYCLOAK_AUTH_REALM: app-realm
+  KEYCLOAK_AUTH_REDIRECT_URI: http://auth-service:8082/api/auth/callback
+
+  KEYCLOAK_OPEN_ID_CONNECT_URI: http://keycloak:8080/realms/app-realm/protocol/openid-connect/token
+
+  KC_DB: postgres
+  KC_DB_USERNAME: postgres
+  KC_PORT: "8080"
+  KC_HOSTNAME: keycloak
+  KC_HOSTNAME_ADMIN_URL: http://keycloak:8080
+  KC_HOSTNAME_PORT: "8080"
+
+  DB_HOST: auth-postgres
+  DB_PORT: "5432"
+  DB_DATABASE: auth_service
+  DB_USER: admin
+  APP_USER: appuser
+  SPRING_DATASOURCE_URL: jdbc:postgresql://auth-postgres:5432/auth_service
