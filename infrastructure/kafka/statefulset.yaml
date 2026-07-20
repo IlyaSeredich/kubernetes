@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: StatefulSet
+
+metadata:
+  name: kafka
+
+spec:
+  serviceName: kafka
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: kafka
+
+  template:
+    metadata:
+      labels:
+        app: kafka
+
+    spec:
+      containers:
+        - name: kafka
+          image: apache/kafka:4.3.1
+          ports:
+            - name: broker
+              containerPort: 9092
+            - name: controller
+              containerPort: 9093
+          envFrom:
+            - configMapRef:
+                name: kafka-config
+            - secretRef:
+                name: kafka-secret
+          volumeMounts:
+            - name: kafka-data
+              mountPath: /var/lib/kafka/data
+          readinessProbe:
+            tcpSocket:
+              port: 9092
+
+  volumeClaimTemplates:
+    - metadata:
+        name: kafka-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi
