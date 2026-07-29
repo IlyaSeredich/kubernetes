@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: auth-postgres-init
+  name: user-postgres-init
 data:
   init-user.sh: |
     #!/bin/bash

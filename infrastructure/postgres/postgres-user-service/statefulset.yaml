@@ -1,9 +1,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
-
 metadata:
   name: user-postgres
-
 spec:
   serviceName: user-postgres
   replicas: 1
@@ -14,7 +12,6 @@ spec:
     metadata:
       labels:
         app: user-postgres
-
     spec:
       containers:
         - name: postgres
@@ -24,12 +21,22 @@ spec:
           envFrom:
             - secretRef:
                 name: user-postgres-secret
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data
             - name: postgres-init
               mountPath: /docker-entrypoint-initdb.d/init-user.sh
               subPath: init-user.sh
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
       volumes:
         - name: postgres-init
           configMap:

@@ -3,10 +3,10 @@ kind: Deployment
 metadata:
   name: auth-service
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: auth-service
-  replicas: 2
   template:
     metadata:
       labels:
@@ -14,12 +14,22 @@ spec:
     spec:
       containers:
         - name: auth-service
-          image: ilya1626/innowise-auth-service
+          image: ilya1626/innowise-auth-service:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8082
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: docker
           envFrom:
             - configMapRef:
                 name: auth-config
             - secretRef:
                 name: auth-secret
-
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"

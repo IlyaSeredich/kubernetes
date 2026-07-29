@@ -1,27 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
-
 metadata:
   name: keycloak
-
 spec:
   replicas: 1
-
   selector:
     matchLabels:
       app: keycloak
-
   template:
     metadata:
       labels:
         app: keycloak
-
     spec:
       containers:
         - name: keycloak
           image: quay.io/keycloak/keycloak:26.4.5
+          command:
+            - "/opt/keycloak/bin/kc.sh"
           args:
-            - start
+            - "start-dev"
           ports:
             - containerPort: 8080
           envFrom:
@@ -29,3 +26,10 @@ spec:
                 name: keycloak-config
             - secretRef:
                 name: keycloak-secret
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"

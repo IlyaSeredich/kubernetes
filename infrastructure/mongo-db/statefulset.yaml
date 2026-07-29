@@ -1,22 +1,17 @@
 apiVersion: apps/v1
 kind: StatefulSet
-
 metadata:
   name: payment-mongodb
-
 spec:
   serviceName: payment-mongodb
   replicas: 1
-
   selector:
     matchLabels:
       app: payment-mongodb
-
   template:
     metadata:
       labels:
         app: payment-mongodb
-
     spec:
       containers:
         - name: mongodb
@@ -29,7 +24,13 @@ spec:
           volumeMounts:
             - name: mongodb-data
               mountPath: /data/db
-
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
   volumeClaimTemplates:
     - metadata:
         name: mongodb-data
@@ -38,4 +39,4 @@ spec:
           - ReadWriteOnce
         resources:
           requests:
-            storage: 5Gi
+            storage: 2Gi

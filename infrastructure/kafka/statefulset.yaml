@@ -1,43 +1,73 @@
 apiVersion: apps/v1
 kind: StatefulSet
-
 metadata:
   name: kafka
-
 spec:
   serviceName: kafka
   replicas: 1
-
   selector:
     matchLabels:
       app: kafka
-
   template:
     metadata:
       labels:
         app: kafka
-
     spec:
-      containers:
-        - name: kafka
-          image: apache/kafka:4.3.1
-          ports:
-            - name: broker
-              containerPort: 9092
-            - name: controller
-              containerPort: 9093
-          envFrom:
-            - configMapRef:
-                name: kafka-config
-            - secretRef:
-                name: kafka-secret
+      initContainers:
+        - name: kafka-format
+          image: apache/kafka:3.9.0
+          command:
+            - sh
+            - -c
+            - |
+              /opt/kafka/bin/kafka-storage.sh format \
+              -t MkU3OEVBNTcwNTJENDM2Qk \
+              -c /opt/kafka/config/server.properties \
+              --ignore-formatted
           volumeMounts:
             - name: kafka-data
               mountPath: /var/lib/kafka/data
-          readinessProbe:
-            tcpSocket:
-              port: 9092
-
+            - name: kafka-config
+              mountPath: /opt/kafka/config/server.properties
+              subPath: server.properties
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      containers:
+        - name: kafka
+          image: apache/kafka:3.9.0
+          ports:
+            - containerPort: 9092
+              name: client
+            - containerPort: 9093
+              name: controller
+          command:
+            - sh
+            - -c
+            - |
+              /opt/kafka/bin/kafka-server-start.sh \
+              /opt/kafka/config/server.properties
+          volumeMounts:
+            - name: kafka-data
+              mountPath: /var/lib/kafka/data
+            - name: kafka-config
+              mountPath: /opt/kafka/config/server.properties
+              subPath: server.properties
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "250m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+      volumes:
+        - name: kafka-config
+          configMap:
+            name: kafka-config
   volumeClaimTemplates:
     - metadata:
         name: kafka-data
@@ -46,4 +76,4 @@ spec:
           - ReadWriteOnce
         resources:
           requests:
-            storage: 5Gi
+            storage: 10Gi

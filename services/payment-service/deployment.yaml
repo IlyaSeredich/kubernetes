@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
       app: payment-service
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -14,12 +14,22 @@ spec:
     spec:
       containers:
         - name: payment-service
-          image: ilya1626/innowise-payment-service
+          image: ilya1626/innowise-payment-service:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8084
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: docker
           envFrom:
             - configMapRef:
                 name: payment-config
             - secretRef:
                 name: payment-secret
-
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"

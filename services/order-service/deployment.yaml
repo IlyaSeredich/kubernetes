@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
       app: order-service
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -14,12 +14,21 @@ spec:
     spec:
       containers:
         - name: order-service
-          image: ilya1626/innowise-order-service
+          image: ilya1626/innowise-order-service:latest
           ports:
             - containerPort: 8083
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: docker
           envFrom:
             - configMapRef:
                 name: order-config
             - secretRef:
                 name: order-secret
-
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"

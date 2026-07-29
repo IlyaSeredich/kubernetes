@@ -30,12 +30,18 @@ spec:
             - name: postgres-init
               mountPath: /docker-entrypoint-initdb.d/init-user.sh
               subPath: init-user.sh
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
       volumes:
         - name: postgres-init
           configMap:
             name: auth-postgres-init
             defaultMode: 0755
-
   volumeClaimTemplates:
     - metadata:
         name: postgres-data

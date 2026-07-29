@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: order-config
+
+data:
+
+  USER_SERVICE_URL: "http://user-service:8081"
+
+  RESOURCE_SERVER_JWK_SET_URI: "http://keycloak:8080/realms/app-realm/protocol/openid-connect/certs"
+
+  APP_KAFKA_TOPIC: "PAYMENTS"
+
+  KAFKA_SERVERS: "kafka:9092"
+
+  KAFKA_GROUP_ID: "payments-group"

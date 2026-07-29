@@ -1,9 +1,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
-
 metadata:
   name: order-postgres
-
 spec:
   serviceName: order-postgres
   replicas: 1
@@ -14,7 +12,6 @@ spec:
     metadata:
       labels:
         app: order-postgres
-
     spec:
       containers:
         - name: postgres
@@ -30,11 +27,17 @@ spec:
             - name: postgres-init
               mountPath: /docker-entrypoint-initdb.d/init-user.sh
               subPath: init-user.sh
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
       volumes:
         - name: postgres-init
           configMap:
             name: order-postgres-init
-
   volumeClaimTemplates:
     - metadata:
         name: postgres-data

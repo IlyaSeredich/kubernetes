@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-config
+data:
+  KEYCLOAK_ROOT_SERVER_URL: "http://keycloak:8080"
+  KEYCLOAK_ROOT_CLIENT: "admin-cli"
+  KEYCLOAK_ROOT_REALM: "master"
+
+  KEYCLOAK_MANAGE_SERVER_URL: "http://keycloak:8080"
+  KEYCLOAK_MANAGE_CLIENT: "app-manage-client"
+  KEYCLOAK_MANAGE_REALM: "app-realm"
+
+  KEYCLOAK_AUTH_SERVER_URL: "http://keycloak:8080"
+  KEYCLOAK_AUTH_CLIENT: "app-auth-client"
+  KEYCLOAK_AUTH_REALM: "app-realm"
+
+  KEYCLOAK_JWK_SET_URI: "http://keycloak:8080/realms/app-realm/protocol/openid-connect/certs"
+
+  KEYCLOAK_OPEN_ID_CONNECT_URI: "http://keycloak:8080/realms/app-realm/protocol/openid-connect/token"
+
+  USER_SERVICE_REGISTER_URI: "http://user-service:8081/api/users"
+
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://auth-postgres:5432/auth_service"
+
+  APP_USER: "appuser"

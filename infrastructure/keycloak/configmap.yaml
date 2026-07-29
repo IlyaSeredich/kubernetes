@@ -8,8 +8,11 @@ data:
   KC_DB_URL_PORT: "5432"
   KC_DB_URL_DATABASE: "postgres"
   KC_DB_SCHEMA: "public"
+
   KC_HOSTNAME: "keycloak"
   KC_HTTP_ENABLED: "true"
-  KC_HEALTH_ENABLED: "true"
-  KC_METRICS_ENABLED: "true"
+  KC_HEALTH_ENABLED: "false"
+  KC_METRICS_ENABLED: "false"
   KC_HOSTNAME_STRICT: "false"
+
+  JAVA_OPTS_KC_HEAP: "-Xms128m -Xmx384m"

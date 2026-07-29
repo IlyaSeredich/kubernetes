@@ -3,10 +3,10 @@ kind: Deployment
 metadata:
   name: user-service
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: user-service
-  replicas: 2
   template:
     metadata:
       labels:
@@ -17,9 +17,18 @@ spec:
           image: ilya1626/innowise-user-service
           ports:
             - containerPort: 8081
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: docker
           envFrom:
             - configMapRef:
                 name: user-config
             - secretRef:
                 name: user-secret
-
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"

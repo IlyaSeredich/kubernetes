@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: payment-config
+
+data:
+  SPRING_APPLICATION_NAME: payment-service
+
+  APP_KAFKA_TOPIC: PAYMENTS
+
+  KAFKA_SERVERS: kafka:9092
+
+  RANDOM_NUM_URL: https://csrng.net/csrng/csrng.php
